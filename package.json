@@ -39,6 +39,14 @@
     "lint": "prettier --check . && lunte",
     "test": "brittle-bare --coverage test/index.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/holepunchto/bare-tui-form.git"
+  },
   "author": "Holepunch",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/holepunchto/bare-tui-form/issues"
+  },
+  "homepage": "https://github.com/holepunchto/bare-tui-form"
 }
