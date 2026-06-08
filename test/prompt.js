@@ -59,6 +59,6 @@ test('prompt: the UI_SCHEMA example schema + uiSchema render together', (t) => {
   const [schema, ui] = jsonObjects(prompt.UI_SCHEMA)
   const f = fromSchema(schema, { uiSchema: ui })
   const [first] = f.fields
-  t.is(first.name, 'pw', 'ui:order put password first')
-  t.is(first.echoMode, 'password', 'ui:widget password applied')
+  t.is(first.key, 'pw', 'ui:order put password first')
+  t.is(first.control.echoMode, 'password', 'ui:widget password applied')
 })
