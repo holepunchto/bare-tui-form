@@ -1,0 +1,20 @@
+const { test } = require('brittle')
+
+require('./fields')
+require('./form')
+require('./run')
+require('./async')
+require('./theme')
+require('./schema')
+require('./security')
+require('./nested')
+require('./dynamic')
+require('./array')
+require('./keys')
+require('./ui')
+require('./structural')
+require('./prompt')
+
+test('works', (t) => {
+  t.pass()
+})
