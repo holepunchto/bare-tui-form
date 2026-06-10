@@ -82,6 +82,40 @@ test('ui: ui:widget textarea (+rows), password, radio', (t) => {
   t.is(leaf(f, 'role').constructor.name, 'RadioField', 'radio widget on an enum')
 })
 
+test('ui: ui:widget file / directory build a path-browsing field', (t) => {
+  const f = form.fromSchema(
+    {
+      type: 'object',
+      properties: { out: { type: 'string' }, where: { type: 'string' } }
+    },
+    {
+      uiSchema: {
+        out: { 'ui:widget': 'file' },
+        where: { 'ui:widget': 'directory', 'ui:options': { showHidden: true } }
+      }
+    }
+  )
+  const out = leaf(f, 'out')
+  const where = leaf(f, 'where')
+  t.is(out.constructor.name, 'FileField', 'file widget → FileField')
+  t.is(out.pick, 'file', 'file mode')
+  t.is(where.constructor.name, 'FileField', 'directory widget → FileField')
+  t.is(where.pick, 'dir', 'directory mode')
+  t.ok(where._pickerOpts.showHidden, 'ui:options.showHidden forwarded')
+})
+
+test('ui: ui:widget file on a non-string warns and falls back', (t) => {
+  const f = form.fromSchema(
+    { type: 'object', properties: { n: { type: 'number' } } },
+    { uiSchema: { n: { 'ui:widget': 'file' } } }
+  )
+  t.is(leaf(f, 'n').constructor.name, 'NumberField', 'not switched to a file field')
+  t.ok(
+    f.warnings.some((w) => /file/.test(w)),
+    'a warning was recorded'
+  )
+})
+
 test('ui: ui:widget hidden collects the value but never renders or focuses', (t) => {
   const f = form.fromSchema(
     {

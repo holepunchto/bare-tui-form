@@ -1,6 +1,7 @@
 const { test } = require('brittle')
 
 require('./fields')
+require('./file')
 require('./form')
 require('./run')
 require('./async')

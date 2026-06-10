@@ -201,6 +201,18 @@ function applyWidget(def, ui, ctx, name, prop) {
       if (def.type !== 'select') return widgetMismatch(def, ctx, name, widget, 'enum')
       def.type = 'radio' // radio takes the same options/selected as select
       return def
+    case 'file':
+    case 'directory': {
+      if (def.type !== 'text') return widgetMismatch(def, ctx, name, widget, 'string')
+      def.type = 'file' // a type-or-browse path field; opens a filepicker overlay
+      def.pick = widget === 'directory' ? 'dir' : 'file'
+      const cwd = uiGet(ui, 'cwd')
+      if (typeof cwd === 'string') def.cwd = harden.cleanText(cwd, ctx.limits.maxTextLength)
+      const height = harden.safeNumber(uiGet(ui, 'height'))
+      if (height) def.height = Math.min(height, 100)
+      if (uiGet(ui, 'showHidden')) def.showHidden = true
+      return def
+    }
     case 'select':
     case 'checkbox':
     case 'checkboxes':
