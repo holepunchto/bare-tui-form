@@ -2,6 +2,7 @@ const { test } = require('brittle')
 
 require('./fields')
 require('./file')
+require('./listfield')
 require('./form')
 require('./run')
 require('./async')

@@ -164,16 +164,13 @@ test('array: entry headers render in the view', (t) => {
   t.ok(v.includes('+ Add'), 'add button shown')
 })
 
-test('array: primitive-item and nested arrays are refused', (t) => {
-  t.exception(
-    () =>
-      form.fromSchema({
-        type: 'object',
-        properties: { xs: { type: 'array', items: { type: 'string' } } }
-      }),
-    /items\.enum or object items/,
-    'array of primitives refused'
-  )
+test('array: string-item arrays build a list; nested arrays are refused', (t) => {
+  // String-item arrays are now supported as an editable scalar list.
+  const f = form.fromSchema({
+    type: 'object',
+    properties: { xs: { type: 'array', items: { type: 'string' } } }
+  })
+  t.is(f.fields[0].constructor.name, 'ListField', 'array of strings → list field')
   t.exception(
     () =>
       form.fromSchema({

@@ -48,6 +48,7 @@ const { confirm } = require('./fields/confirm')
 const { multiselect } = require('./fields/multiselect')
 const { constant } = require('./fields/constant')
 const { file } = require('./fields/file')
+const { list } = require('./fields/list')
 const { action } = require('./fields/action')
 const { SectionToggleField } = require('./fields/section')
 const { Field } = require('./fields/base')
@@ -84,7 +85,18 @@ function mergeKeys(user) {
 }
 const SEP = '\u0000' // path/cache-key segment separator: a NUL, which never appears in a JSON key
 
-const builders = { text, textarea, number, select, radio, confirm, multiselect, constant, file }
+const builders = {
+  text,
+  textarea,
+  number,
+  select,
+  radio,
+  confirm,
+  multiselect,
+  constant,
+  file,
+  list
+}
 
 // Turn a leaf field definition object into a field instance; pass instances
 // through untouched. Object/variant/conditional/array groups are handled by

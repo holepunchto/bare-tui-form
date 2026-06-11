@@ -154,14 +154,27 @@ test('schema: single primitive schema → one-field form', (t) => {
   t.is(f.value().name, 'Chuck', 'default applied')
 })
 
-test('schema: unsupported shapes throw clearly', (t) => {
+test('schema: array + string items becomes an editable list', (t) => {
+  const f = form.fromSchema({
+    type: 'object',
+    properties: {
+      tags: { type: 'array', items: { type: 'string' }, default: ['x', 'y'], maxItems: 5 }
+    }
+  })
+  const tags = f.fields[0]
+  t.is(tags.constructor.name, 'ListField', 'array+string items → list field')
+  t.alike(tags.value(), ['x', 'y'], 'default array seeded the rows')
+  t.is(tags.max, 5, 'maxItems carried through')
+})
+
+test('schema: unsupported array shapes throw clearly', (t) => {
   t.exception(
     () =>
       form.fromSchema({
         type: 'object',
-        properties: { items: { type: 'array', items: { type: 'string' } } }
+        properties: { nums: { type: 'array', items: { type: 'number' } } }
       }),
-    /items\.enum/
+    /items\.enum|object items/
   )
 })
 

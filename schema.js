@@ -18,6 +18,7 @@
 //     integer / boolean
 //   enum                     → select (single choice)
 //   array + items.enum       → multiselect (choose many)
+//   array + items: string    → an editable list of scalar text rows (add/remove)
 //   array + items: object    → a repeatable subform the user grows/shrinks
 //     (minItems / maxItems)     (each entry is the item object's fields)
 //   required[]               → required fields
@@ -28,9 +29,9 @@
 //     pattern / format
 //   minimum / maximum        → number bounds
 //
-// Not yet: arrays of primitives or free-form items, nested arrays, allOf (schema
-// merge), $ref. Unsupported shapes throw a clear error rather than silently
-// producing the wrong form.
+// Not yet: arrays of non-string primitives (number/boolean items), nested arrays,
+// allOf (schema merge), $ref. Unsupported shapes throw a clear error rather than
+// silently producing the wrong form.
 //
 // SECURITY: a JSON Schema is frequently untrusted input — produced by an LLM or
 // received from a peer — and this function is the boundary where it becomes
@@ -457,8 +458,8 @@ function withoutNested(sub) {
   return { properties: sub.properties || {}, required: sub.required || [] }
 }
 
-// array → multiselect (items.enum) or a repeatable object subform (items is an
-// object). Other array shapes (primitive items, nested arrays) are refused.
+// array → multiselect (items.enum), an editable scalar list (string items), or a
+// repeatable object subform (object items). Nested arrays are refused.
 // `ui` supplies item presentation (ui.items) and add/remove gating.
 function arrayProperty(name, base, prop, ctx, depth, ui = {}) {
   const items = prop.items || {}
@@ -471,6 +472,27 @@ function arrayProperty(name, base, prop, ctx, depth, ui = {}) {
       type: 'multiselect',
       options: optionsFromEnum(items.enum, items.enumNames, ctx, name),
       value: def.map((v) => cleanScalar(v, ctx, 0))
+    }
+  }
+
+  // string (or untyped) primitive items → an editable list of scalar text rows.
+  if (!items.properties && (typeOf(items) === 'string' || typeOf(items) === undefined)) {
+    countLeaf(ctx)
+    const cap = ctx.limits.maxArrayItems
+    const maxItems = Math.min(harden.safeNumber(prop.maxItems) ?? cap, cap)
+    const minItems = Math.min(Math.max(harden.safeNumber(prop.minItems) ?? 0, 0), maxItems)
+    const def = Array.isArray(prop.default) ? prop.default.slice(0, cap) : []
+    const placeholder = uiGet(ui, 'placeholder')
+    return {
+      ...base,
+      type: 'list',
+      value: def.map((v) => harden.cleanText(String(v), ctx.limits.maxTextLength)),
+      minItems,
+      maxItems,
+      itemPlaceholder:
+        typeof placeholder === 'string'
+          ? harden.cleanText(placeholder, ctx.limits.maxTextLength)
+          : undefined
     }
   }
 

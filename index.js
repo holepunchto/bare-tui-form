@@ -33,6 +33,7 @@ const { radio, RadioField } = require('./fields/radio')
 const { confirm, ConfirmField } = require('./fields/confirm')
 const { multiselect, MultiSelectField } = require('./fields/multiselect')
 const { file, FileField } = require('./fields/file')
+const { list, ListField } = require('./fields/list')
 const { section, SectionToggleField } = require('./fields/section')
 const { constant, ConstField } = require('./fields/constant')
 const { action, ActionField } = require('./fields/action')
@@ -59,6 +60,7 @@ module.exports = {
   confirm,
   multiselect,
   file, // a type-or-browse path field (filepicker overlay); ui:widget 'file' / 'directory'
+  list, // an editable list of scalar text rows (array of string items)
   section, // the optional-section gate (usually produced by fromSchema, not hand-written)
   constant, // a fixed value (JSON Schema const); usually produced by fromSchema
   action, // a focusable button (array add/remove); usually produced by fromSchema
@@ -77,6 +79,7 @@ module.exports = {
   ConfirmField,
   MultiSelectField,
   FileField,
+  ListField,
   SectionToggleField,
   ConstField,
   ActionField
