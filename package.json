@@ -23,7 +23,7 @@
     "README.md"
   ],
   "dependencies": {
-    "bare-tui": "^0.0.2"
+    "bare-tui": "^0.0.3"
   },
   "devDependencies": {
     "bare-fs": "^4.7.1",
