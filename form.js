@@ -915,12 +915,9 @@ class Form {
     }
     if (this.submitted) return [t.help('  ✓ submitted')]
     const chord = (a) => (a && a[0]) || ''
-    const parts = [
-      `${chord(this.keys.next)} move`,
-      `${chord(this.keys.confirm)} confirm`,
-      `${chord(this.keys.submit)} submit`,
-      `${chord(this.keys.cancel)} cancel`
-    ]
+    const parts = []
+    if (this.ring.items.length > 1) parts.push(`${chord(this.keys.next)} move`)
+    parts.push(`${chord(this.keys.submit)} submit`, `${chord(this.keys.cancel)} cancel`)
     if (scrollable) parts.push('↕ scroll')
     return [t.help('  ' + parts.join(' · '))]
   }
