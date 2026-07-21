@@ -35,7 +35,9 @@ class SelectField extends Field {
   }
 
   controlView() {
-    return this.control.view()
+    const view = this.control.view()
+    if (this.control.open) return view
+    return view + '\n' + this.theme.help('  space to open')
   }
 }
 
