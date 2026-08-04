@@ -61,6 +61,8 @@ class Field {
     this.hideLabel = !!opts.hideLabel
     this.autofocus = !!opts.autofocus
     this.hidden = !!opts.hidden
+    this.inverse = !!opts.inverse
+    if (this.inverse) this.label = `no ${this.label}`
     if (opts.readonly || opts.hidden) this.focusable = false
     this.required = !!opts.required
     this.requiredMessage = opts.requiredMessage || 'required'
