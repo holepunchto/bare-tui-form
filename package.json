@@ -1,6 +1,6 @@
 {
   "name": "bare-tui-form",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A declarative form builder for bare-tui",
   "main": "index.js",
   "exports": {
