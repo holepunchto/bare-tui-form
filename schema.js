@@ -363,6 +363,7 @@ function fieldFromProperty(name, prop, required, ctx, depth, ui = {}) {
         label: base.label,
         description: base.description,
         type: 'confirm',
+        inverse: prop.inverse,
         value: !!prop.default
       })
     default:
